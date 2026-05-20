@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Accounts">
+<meta name="theme-color" content="#0d1b2e" id="theme-color-meta">
+<title>My Accounts — A&Y & Divilite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1b2e;--surface:#152235;--surface2:#1c2f45;--border:rgba(255,255,255,0.11);--border2:rgba(255,255,255,0.20);--text:#ffffff;--text2:#b8cfe8;--text3:#7a9bbf;--green:#00e5a0;--green-bg:rgba(0,229,160,0.15);--red:#ff5277;--red-bg:rgba(255,82,119,0.15);--blue:#4d9fff;--blue-bg:rgba(77,159,255,0.15);--amber:#ffbe3d;--amber-bg:rgba(255,190,61,0.15);--firm:#a78bfa;--firm-bg:rgba(167,139,250,0.18);--company:#38bdf8;--company-bg:rgba(56,189,248,0.18);--personal:#f472b6;--personal-bg:rgba(244,114,182,0.18);--radius:14px;--radius-sm:8px;--bottom-h:72px;--safe-bottom:env(safe-area-inset-bottom,0px)}
+body.light{--bg:#f0f4f8;--surface:#ffffff;--surface2:#e8eef5;--border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.15);--text:#0f172a;--text2:#334155;--text3:#64748b;--firm:#7c3aed;--firm-bg:rgba(124,58,237,0.10);--company:#0369a1;--company-bg:rgba(3,105,161,0.10);--personal:#be185d;--personal-bg:rgba(190,24,93,0.10);--green:#059669;--green-bg:rgba(5,150,105,0.10);--red:#e11d48;--red-bg:rgba(225,29,72,0.10);--blue:#2563eb;--blue-bg:rgba(37,99,235,0.10);--amber:#d97706;--amber-bg:rgba(217,119,6,0.10)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:'DM Sans',sans-serif;color:var(--text);transition:background 0.3s,color 0.3s}
+.app{display:flex;flex-direction:column;height:100%;height:100dvh}
+.header{padding:52px 16px 12px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.header-left{min-width:0}
+.header-sub{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:1px}
+.header-title{font-size:20px;font-weight:600;color:var(--text)}
+.header-actions{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{background:var(--surface);border:1px solid var(--border2);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.screen-wrap{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--bottom-h) + var(--safe-bottom) + 16px);scrollbar-width:none}
+.screen-wrap::-webkit-scrollbar{display:none}
+.screen{display:none;padding:14px}
+.screen.active{display:block}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--bottom-h) + var(--safe-bottom));padding-bottom:var(--safe-bottom);background:var(--surface);border-top:1px solid var(--border2);display:flex;align-items:flex-start;padding-top:8px;z-index:100}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:3px 0;color:var(--text3);font-size:8px;font-family:'DM Sans',sans-serif;transition:color 0.2s}
+.nav-btn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--text)}.nav-btn.active svg{stroke-width:2.2}
+.nav-dot{width:4px;height:4px;border-radius:2px;background:currentColor;opacity:0;transition:opacity 0.2s}
+.nav-btn.active .nav-dot{opacity:1}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.metric-card{background:var(--surface);border-radius:var(--radius);padding:13px 14px;border:1px solid var(--border);position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent-color,var(--blue))}
+.metric-label{font-size:10px;color:var(--text3);margin-bottom:5px;font-weight:500}
+.metric-value{font-size:17px;font-weight:600;font-family:'DM Mono',monospace}
+.metric-value.green{color:var(--green)}.metric-value.red{color:var(--red)}.metric-value.amber{color:var(--amber)}
+.section{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.section-header{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px}
+.section-title svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.section-body{padding:14px}
+.section-action{font-size:12px;color:var(--blue);cursor:pointer;font-weight:500}
+.form-group{margin-bottom:11px}
+.form-label{font-size:10px;color:var(--text3);font-weight:500;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;display:block}
+.form-control{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;padding:11px 13px;appearance:none;-webkit-appearance:none;outline:none;transition:border-color 0.2s}
+.form-control:focus{border-color:var(--blue)}
+.form-control option{background:#1e293b}
+body.light .form-control option{background:#fff}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn-submit{width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.2s;margin-top:4px}
+.btn-submit:active{opacity:0.8;transform:scale(0.98)}
+.btn-submit svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.month-pills{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.month-pills::-webkit-scrollbar{display:none}
+.month-pill{flex-shrink:0;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.month-pill.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.entry-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.entry-item:last-child{border-bottom:none}
+.entry-item.pending-item{border-left:3px solid var(--amber)}
+.entry-left{flex:1;min-width:0}
+.entry-cat{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-desc{font-size:12px;color:var(--text3)}
+.entry-date-row{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
+.entry-date{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.entry-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.entry-amt{font-size:14px;font-weight:600;font-family:'DM Mono',monospace}
+.entry-amt.income{color:var(--green)}.entry-amt.expense{color:var(--red)}
+.btn-del,.btn-check{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px;border-radius:6px;display:flex}
+.btn-del:active{background:var(--red-bg);color:var(--red)}
+.btn-del svg,.btn-check svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-check.checked{color:var(--green)}
+.badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;white-space:nowrap}
+.badge-income{background:var(--green-bg);color:var(--green)}
+.badge-expense{background:var(--red-bg);color:var(--red)}
+.badge-withdrawal{background:var(--amber-bg);color:var(--amber)}
+.badge-cc{background:var(--firm-bg);color:var(--firm)}
+.badge-pending{background:var(--amber-bg);color:var(--amber)}
+.badge-gst{background:var(--blue-bg);color:var(--blue)}
+.badge-recurring{background:var(--personal-bg);color:var(--personal)}
+.bar-item{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.bar-label{font-size:11px;color:var(--text2);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.5s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);width:68px;text-align:right;flex-shrink:0}
+.profit-card{background:linear-gradient(135deg,#1a2f50 0%,#152235 100%);border:1px solid var(--border2);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+body.light .profit-card{background:linear-gradient(135deg,#dbeafe 0%,#eff6ff 100%)}
+.profit-big{font-size:30px;font-weight:600;font-family:'DM Mono',monospace;margin:6px 0 3px}
+.profit-big.positive{color:var(--green)}.profit-big.negative{color:var(--red)}
+.profit-sub{font-size:11px;color:var(--text3)}
+.profit-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.profit-col label{font-size:10px;color:var(--text3);display:block;margin-bottom:2px}
+.profit-col span{font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
+.oa-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.oa-left{display:flex;align-items:center;gap:11px}
+.oa-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.oa-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.oa-name{font-size:13px;font-weight:600;margin-bottom:1px}
+.oa-sub{font-size:10px;color:var(--text3)}
+.oa-right{text-align:right}
+.oa-profit{font-size:15px;font-weight:600;font-family:'DM Mono',monospace}
+.oa-label{font-size:10px;color:var(--text3);margin-top:1px}
+.ov-total{background:var(--surface2);border-radius:var(--radius);padding:14px;border:1px solid var(--border);margin-bottom:12px}
+.ov-total-label{font-size:10px;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px}
+.ov-total-val{font-size:26px;font-weight:600;font-family:'DM Mono',monospace}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:18px 16px;padding-bottom:calc(18px + var(--safe-bottom))}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-size:16px;font-weight:600}
+.modal-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:22px;line-height:1}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.action-btn{flex:1;min-width:110px;padding:11px 10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px;justify-content:center}
+.action-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.action-btn:active{opacity:0.8}
+.btn-danger-soft{background:var(--red-bg);color:var(--red);border-color:transparent}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.fy-pill{flex-shrink:0;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.fy-pill.active{background:var(--firm);color:#fff;border-color:var(--firm)}
+.client-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border)}
+.client-row:last-child{border-bottom:none}
+.client-name{font-size:13px;font-weight:600}
+.client-meta{font-size:11px;color:var(--text3);margin-top:1px}
+.client-amt{font-size:14px;font-weight:600;font-family:'DM Mono',monospace;color:var(--green)}
+.empty-state{text-align:center;padding:28px 16px;color:var(--text3)}
+.empty-state svg{width:32px;height:32px;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-bottom:8px;opacity:0.5}
+.empty-state p{font-size:13px}
+#screen-firm .btn-submit{background:var(--firm)}
+#screen-firm .month-pill.active{background:var(--firm);border-color:var(--firm)}
+#screen-firm .metric-card{--accent-color:var(--firm)}
+#screen-company .btn-submit{background:var(--company)}
+#screen-company .month-pill.active{background:var(--company);border-color:var(--company)}
+#screen-company .metric-card{--accent-color:var(--company)}
+#screen-personal .btn-submit{background:var(--personal)}
+#screen-personal .month-pill.active{background:var(--personal);border-color:var(--personal)}
+#screen-personal .metric-card{--accent-color:var(--personal)}
+
+/* Custom confirm modal */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.confirm-overlay.open{display:flex}
+.confirm-box{background:var(--surface);border-radius:20px 20px 0 0;width:100%;padding:20px 16px;padding-bottom:calc(16px + var(--safe-bottom))}
+.confirm-msg{font-size:15px;color:var(--text);text-align:center;margin-bottom:18px;line-height:1.4}
+.confirm-msg-sub{font-size:12px;color:var(--text3);text-align:center;margin-top:4px}
+.confirm-btns{display:flex;gap:10px}
+.confirm-btn{flex:1;padding:13px;border-radius:var(--radius-sm);border:none;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
+.confirm-btn-cancel{background:var(--surface2);color:var(--text)}
+.confirm-btn-ok{background:var(--red);color:#fff}
+.confirm-btn-ok.green{background:var(--green);color:#000}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-left">
+        <div class="header-sub">Finance Tracker</div>
+        <div class="header-title" id="header-title">Overview</div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
+          <svg id="theme-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="icon-btn" onclick="openSettings()" title="Settings &amp; Export">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-wrap">
+
+    <!-- OVERVIEW -->
+    <div class="screen active" id="screen-overview">
+      <div class="ov-total">
+        <div class="ov-total-label">Combined Net Profit</div>
+        <div class="ov-total-val" id="ov-combined">&#8377;0</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px" id="ov-fy-label">All time</div>
+      </div>
+      <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;scrollbar-width:none" id="ov-fy-pills"></div>
+      <div onclick="goTo('firm')" class="oa-card">
+        <div class="oa-left">
+          <div class="oa-icon" style="background:var(--firm-bg);color:var(--firm)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><div class="oa-name" style="color:var(--firm)">A &amp; Y Associates</div><div class="oa-sub">Firm Account</div></div>
+        </div>
+        <div class="oa-right"><div class="oa-profit" id="ov-firm-profit">&#8377;0</div><div class="oa-label">Net Profit</div></div>
+      </div>
+      <div onclick="goTo('company')" class="oa-card">
+        <div class="oa-left">
+          <div class="oa-icon" style="background:var(--company-bg);color:var(--company)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+          <div><div class="oa-name" style="color:var(--company)">Divilite Corporate Solutions</div><div class="oa-sub">OPC Pvt Ltd</div></div>
+        </div>
+        <div class="oa-right"><div class="oa-profit" id="ov-company-profit">&#8377;0</div><div class="oa-label">Net Profit</div></div>
+      </div>
+      <div onclick="goTo('personal')" class="oa-card">
+        <div class="oa-left">
+          <div class="oa-icon" style="background:var(--personal-bg);color:var(--personal)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div><div class="oa-name" style="color:var(--personal)">Personal</div><div class="oa-sub">Expenses &amp; Withdrawals</div></div>
+        </div>
+        <div class="oa-right"><div class="oa-profit" id="ov-personal-out" style="color:var(--red)">&#8377;0</div><div class="oa-label">Total Outgoing</div></div>
+      </div>
+      <div id="ov-pending-block"></div>
+    </div>
+
+    <!-- FIRM -->
+    <div class="screen" id="screen-firm">
+      <div class="profit-card">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px">Net Profit &mdash; A &amp; Y Associates</div>
+        <div class="profit-big" id="firm-net">&#8377;0</div>
+        <div class="profit-sub" id="firm-period">All time</div>
+        <div class="profit-row">
+          <div class="profit-col"><label>Received</label><span style="color:var(--green)" id="firm-tot-inc">&#8377;0</span></div>
+          <div class="profit-col"><label>Expense</label><span style="color:var(--red)" id="firm-tot-exp">&#8377;0</span></div>
+          <div class="profit-col"><label>GST</label><span style="color:var(--blue)" id="firm-tot-gst">&#8377;0</span></div>
+        </div>
+      </div>
+      <div class="month-pills" id="firm-months"></div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Client Report</span>
+          <span class="section-action" onclick="toggleClientReport('firm')" id="firm-cr-btn">View</span>
+        </div>
+        <div id="firm-client-report" style="display:none"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</span></div>
+        <div class="section-body">
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Type</label>
+              <select class="form-control" id="firm-type" onchange="toggleBizFields('firm')">
+                <option value="expense">Expense</option><option value="income">Income from Client</option>
+              </select>
+            </div>
+            <div class="form-group" id="firm-cat-wrap"><label class="form-label">Category</label>
+              <select class="form-control" id="firm-cat">
+                <option>ROC Fees</option><option>Stamp Duty</option><option>Electricity Bill</option><option>Gas Bill</option><option>Internet Bill</option><option>Acquard AMC</option><option>AC AMC</option><option>Other Expense</option>
+              </select>
+            </div>
+            <div class="form-group" id="firm-client-wrap" style="display:none"><label class="form-label">Client Name</label>
+              <input type="text" class="form-control" id="firm-client" placeholder="Client name">
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description / Reference No.</label>
+            <input type="text" class="form-control" id="firm-desc" placeholder="Notes, challan no, bill no...">
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">Amount (&#8377;)</label>
+              <input type="number" class="form-control" id="firm-amt" placeholder="0" inputmode="decimal" min="0">
+            </div>
+            <div class="form-group"><label class="form-label">GST % (opt)</label>
+              <input type="number" class="form-control" id="firm-gst" placeholder="18" inputmode="decimal" min="0" max="28">
+            </div>
+            <div class="form-group"><label class="form-label">Date</label>
+              <input type="date" class="form-control" id="firm-date">
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;margin-bottom:11px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text2);cursor:pointer">
+              <input type="checkbox" id="firm-recurring" style="width:16px;height:16px;accent-color:var(--firm)"> Recurring monthly
+            </label>
+            <label id="firm-pending-wrap" style="display:none;align-items:center;gap:7px;font-size:13px;color:var(--text2);cursor:pointer">
+              <input type="checkbox" id="firm-pending" style="width:16px;height:16px;accent-color:var(--amber)"> Mark as pending
+            </label>
+          </div>
+          <button class="btn-submit" onclick="addEntry('firm')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Expense Breakdown</span></div>
+        <div class="section-body" id="firm-breakdown"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Entries</span></div>
+        <div id="firm-list"></div>
+      </div>
+    </div>
+
+    <!-- COMPANY -->
+    <div class="screen" id="screen-company">
+      <div class="profit-card">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px">Net Profit &mdash; Divilite OPC</div>
+        <div class="profit-big" id="company-net">&#8377;0</div>
+        <div class="profit-sub" id="company-period">All time</div>
+        <div class="profit-row">
+          <div class="profit-col"><label>Received</label><span style="color:var(--green)" id="company-tot-inc">&#8377;0</span></div>
+          <div class="profit-col"><label>Expense</label><span style="color:var(--red)" id="company-tot-exp">&#8377;0</span></div>
+          <div class="profit-col"><label>GST</label><span style="color:var(--blue)" id="company-tot-gst">&#8377;0</span></div>
+        </div>
+      </div>
+      <div class="month-pills" id="company-months"></div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Client Report</span>
+          <span class="section-action" onclick="toggleClientReport('company')" id="company-cr-btn">View</span>
+        </div>
+        <div id="company-client-report" style="display:none"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</span></div>
+        <div class="section-body">
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Type</label>
+              <select class="form-control" id="company-type" onchange="toggleBizFields('company')">
+                <option value="expense">Expense</option><option value="income">Income from Client</option>
+              </select>
+            </div>
+            <div class="form-group" id="company-cat-wrap"><label class="form-label">Category</label>
+              <select class="form-control" id="company-cat">
+                <option>ROC Fees</option><option>Stamp Duty</option><option>Electricity Bill</option><option>Gas Bill</option><option>Internet Bill</option><option>Acquard AMC</option><option>AC AMC</option><option>Other Expense</option>
+              </select>
+            </div>
+            <div class="form-group" id="company-client-wrap" style="display:none"><label class="form-label">Client Name</label>
+              <input type="text" class="form-control" id="company-client" placeholder="Client name">
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description / Reference No.</label>
+            <input type="text" class="form-control" id="company-desc" placeholder="Notes, challan no, bill no...">
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">Amount (&#8377;)</label>
+              <input type="number" class="form-control" id="company-amt" placeholder="0" inputmode="decimal" min="0">
+            </div>
+            <div class="form-group"><label class="form-label">GST % (opt)</label>
+              <input type="number" class="form-control" id="company-gst" placeholder="18" inputmode="decimal" min="0" max="28">
+            </div>
+            <div class="form-group"><label class="form-label">Date</label>
+              <input type="date" class="form-control" id="company-date">
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;margin-bottom:11px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text2);cursor:pointer">
+              <input type="checkbox" id="company-recurring" style="width:16px;height:16px;accent-color:var(--company)"> Recurring monthly
+            </label>
+            <label id="company-pending-wrap" style="display:none;align-items:center;gap:7px;font-size:13px;color:var(--text2);cursor:pointer">
+              <input type="checkbox" id="company-pending" style="width:16px;height:16px;accent-color:var(--amber)"> Mark as pending
+            </label>
+          </div>
+          <button class="btn-submit" onclick="addEntry('company')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Expense Breakdown</span></div>
+        <div class="section-body" id="company-breakdown"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Entries</span></div>
+        <div id="company-list"></div>
+      </div>
+    </div>
+
+    <!-- PERSONAL -->
+    <div class="screen" id="screen-personal">
+      <div class="metric-grid">
+        <div class="metric-card"><div class="metric-label">Cash Expenses</div><div class="metric-value red" id="p-exp">&#8377;0</div></div>
+        <div class="metric-card"><div class="metric-label">Credit Card</div><div class="metric-value amber" id="p-cc">&#8377;0</div></div>
+        <div class="metric-card"><div class="metric-label">From A &amp; Y</div><div class="metric-value red" id="p-firm">&#8377;0</div></div>
+        <div class="metric-card"><div class="metric-label">From Divilite</div><div class="metric-value red" id="p-company">&#8377;0</div></div>
+      </div>
+      <div id="personal-budget-bar" style="margin-bottom:12px"></div>
+      <div class="month-pills" id="personal-months"></div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</span></div>
+        <div class="section-body">
+          <div class="form-group"><label class="form-label">Type</label>
+            <select class="form-control" id="personal-type">
+              <option value="expense">Personal Expense</option>
+              <option value="credit-card">Credit Card Expense</option>
+              <option value="withdrawal-firm">Withdrawal &mdash; A &amp; Y Associates</option>
+              <option value="withdrawal-company">Withdrawal &mdash; Divilite OPC</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Description</label>
+            <input type="text" class="form-control" id="personal-desc" placeholder="e.g. Rent, Groceries, Salary...">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Amount (&#8377;)</label>
+              <input type="number" class="form-control" id="personal-amt" placeholder="0" inputmode="decimal" min="0">
+            </div>
+            <div class="form-group"><label class="form-label">Date</label>
+              <input type="date" class="form-control" id="personal-date">
+            </div>
+          </div>
+          <button class="btn-submit" onclick="addEntry('personal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Outgoing Breakdown</span></div>
+        <div class="section-body" id="personal-breakdown"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Entries</span></div>
+        <div id="personal-list"></div>
+      </div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="screen" id="screen-invoices">
+      <div class="metric-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div class="metric-card" style="--accent-color:#ff5277"><div class="metric-label">GST Payable</div><div class="metric-value red" id="inv-gst-pay">&#8377;0</div></div>
+        <div class="metric-card" style="--accent-color:#ffbe3d"><div class="metric-label">Outstanding</div><div class="metric-value amber" id="inv-outstanding">&#8377;0</div></div>
+        <div class="metric-card" style="--accent-color:#00e5a0"><div class="metric-label">Collected</div><div class="metric-value green" id="inv-collected">&#8377;0</div></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>GST Summary</span>
+          <span style="font-size:10px;color:var(--text3)">Due on invoice date</span>
+        </div>
+        <div id="inv-gst-summary" class="section-body"><p style="font-size:12px;color:var(--text3)">No invoices yet.</p></div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none">
+        <button class="month-pill active" id="inv-filter-all" onclick="setInvFilter('all')">All</button>
+        <button class="month-pill" id="inv-filter-firm" onclick="setInvFilter('firm')">A &amp; Y</button>
+        <button class="month-pill" id="inv-filter-company" onclick="setInvFilter('company')">Divilite</button>
+        <button class="month-pill" id="inv-filter-pending" onclick="setInvFilter('pending')" style="color:var(--amber)">Pending</button>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Raise Invoice</span></div>
+        <div class="section-body">
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Account</label>
+              <select class="form-control" id="inv-account"><option value="firm">A &amp; Y Associates</option><option value="company">Divilite OPC</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Invoice No.</label>
+              <input type="text" class="form-control" id="inv-no" placeholder="INV-001">
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Client Name</label>
+            <input type="text" class="form-control" id="inv-client" placeholder="Client name">
+          </div>
+          <div class="form-group"><label class="form-label">Service / Description</label>
+            <input type="text" class="form-control" id="inv-desc" placeholder="e.g. Company registration, GST filing...">
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">Base Amount (&#8377;)</label>
+              <input type="number" class="form-control" id="inv-base" placeholder="0" inputmode="decimal" min="0" oninput="calcInvTotal()">
+            </div>
+            <div class="form-group"><label class="form-label">GST %</label>
+              <select class="form-control" id="inv-gst-pct" onchange="calcInvTotal()">
+                <option value="0">0% Exempt</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Invoice Date</label>
+              <input type="date" class="form-control" id="inv-date">
+            </div>
+          </div>
+          <div id="inv-total-preview" style="background:var(--surface2);border-radius:var(--radius-sm);padding:11px 13px;margin-bottom:11px;display:none">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:4px"><span>Base Amount</span><span id="prev-base">&#8377;0</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--blue);margin-bottom:4px"><span id="prev-gst-label">GST (18%)</span><span id="prev-gst">&#8377;0</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600;color:var(--text);border-top:1px solid var(--border);padding-top:6px"><span>Total Invoice</span><span id="prev-total">&#8377;0</span></div>
+          </div>
+          <div class="form-group"><label class="form-label">Due Date (optional)</label>
+            <input type="date" class="form-control" id="inv-due">
+          </div>
+          <button class="btn-submit" style="background:var(--firm)" onclick="raiseInvoice()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Raise Invoice</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All Invoices</span>
+          <span id="inv-count-label" style="font-size:11px;color:var(--text3)"></span>
+        </div>
+        <div id="inv-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-overview" onclick="goTo('overview')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Overview<div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-firm" onclick="goTo('firm')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      A &amp; Y<div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-company" onclick="goTo('company')">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+      Divilite<div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-personal" onclick="goTo('personal')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Personal<div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-invoices" onclick="goTo('invoices')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Invoices<div class="nav-dot"></div>
+    </button>
+  </nav>
+</div>
+
+
+<!-- Custom Confirm Modal -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-msg" id="confirm-msg">Are you sure?</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn confirm-btn-cancel" onclick="resolveConfirm(false)">Cancel</button>
+      <button class="confirm-btn confirm-btn-ok" id="confirm-ok-btn" onclick="resolveConfirm(true)">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="modal-title">Settings &amp; Tools</div>
+      <button class="modal-close" onclick="closeSettings()">&#x2715;</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Export CSV</div>
+    <div class="action-row">
+      <button class="action-btn" onclick="exportCSV('firm')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Firm</button>
+      <button class="action-btn" onclick="exportCSV('company')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Company</button>
+      <button class="action-btn" onclick="exportCSV('personal')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Personal</button>
+    </div>
+    <button class="action-btn" style="width:100%;margin-bottom:10px" onclick="exportAllCSV()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Export All Accounts (CSV)</button>
+    <button class="action-btn" style="width:100%;margin-bottom:10px" onclick="printSummary()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print Summary / Save PDF</button>
+    <hr class="divider">
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Backup &amp; Restore</div>
+    <div class="action-row">
+      <button class="action-btn" onclick="backupData()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Backup Data</button>
+      <button class="action-btn" onclick="document.getElementById('restore-file').click()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Restore Data</button>
+    </div>
+    <input type="file" id="restore-file" accept=".json" style="display:none" onchange="restoreData(event)">
+    <hr class="divider">
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Recurring Entries</div>
+    <div id="recurring-list-modal"><p style="font-size:13px;color:var(--text3)">No recurring entries yet.</p></div>
+    <hr class="divider">
+    <button class="action-btn btn-danger-soft" style="width:100%" onclick="clearAll()">
+      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>Clear All Data
+    </button>
+  </div>
+</div>
+
+<script>
+
+// ---- Custom confirm & alert (Safari PWA safe) ----
+let _confirmResolve = null;
+function customConfirm(msg, okLabel='Delete', okClass=''){
+  return new Promise(resolve=>{
+    _confirmResolve = resolve;
+    document.getElementById('confirm-msg').textContent = msg;
+    const okBtn = document.getElementById('confirm-ok-btn');
+    okBtn.textContent = okLabel;
+    okBtn.className = 'confirm-btn confirm-btn-ok' + (okClass?' '+okClass:'');
+    document.getElementById('confirm-overlay').classList.add('open');
+  });
+}
+function resolveConfirm(val){
+  document.getElementById('confirm-overlay').classList.remove('open');
+  if(_confirmResolve){ _confirmResolve(val); _confirmResolve=null; }
+}
+// Override native confirm/alert for PWA safety
+window._nativeAlert = window.alert;
+function safeAlert(msg){ 
+  // Use confirm modal with single OK button
+  customConfirm(msg, 'OK', 'green').then(()=>{});
+}
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const TITLES={overview:'Overview',firm:'A & Y Associates',company:'Divilite OPC',personal:'Personal'};
+let data={firm:[],company:[],personal:[]};
+let filters={firm:'all',company:'all',personal:'all'};
+let fyFilter='all';
+let current='overview';
+let crOpen={firm:false,company:false};
+let isDark=true;
+
+try{const s=localStorage.getItem('my_accounts_v4');if(s)data=JSON.parse(s);}catch(e){}
+try{isDark=localStorage.getItem('theme_v4')!=='light';}catch(e){}
+
+function save(){try{localStorage.setItem('my_accounts_v4',JSON.stringify(data));}catch(e){}}
+function fmt(n){return '\u20B9'+Math.round(Number(n)).toLocaleString('en-IN');}
+function today(){return new Date().toISOString().split('T')[0];}
+function mkey(d){const dt=new Date(d);return dt.getFullYear()+'-'+(dt.getMonth()+1).toString().padStart(2,'0');}
+function mlabel(k){const[y,m]=k.split('-');return MONTHS[parseInt(m)-1]+' '+y;}
+function allMonths(acc){return[...new Set(data[acc].map(e=>mkey(e.date)))].sort().reverse();}
+function filtered(acc){const f=filters[acc];if(f==='all')return data[acc];return data[acc].filter(e=>mkey(e.date)===f);}
+
+function getFYs(){
+  const all=new Set();
+  ['firm','company','personal'].forEach(acc=>{
+    data[acc].forEach(e=>{
+      const dt=new Date(e.date);
+      const y=dt.getMonth()>=3?dt.getFullYear():dt.getFullYear()-1;
+      all.add(y);
+    });
+  });
+  return[...all].sort().reverse();
+}
+function inFY(dateStr,fy){
+  if(fy==='all')return true;
+  const dt=new Date(dateStr);const y=parseInt(fy);
+  return dt>=new Date(y,3,1)&&dt<=new Date(y+1,2,31);
+}
+function fyLabel(y){return'FY '+y+'-'+(y+1).toString().slice(2);}
+
+function applyTheme(){
+  document.body.classList.toggle('light',!isDark);
+  try{document.getElementById('theme-color-meta').content=isDark?'#0d1b2e':'#f0f4f8';}catch(e){}
+  const btn=document.querySelector('button[onclick="toggleTheme()"]');
+  if(btn){
+    btn.innerHTML=isDark
+      ?'<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>'
+      :'<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  }
+}
+function toggleTheme(){
+  isDark=!isDark;
+  try{localStorage.setItem('theme_v4',isDark?'dark':'light');}catch(e){}
+  try{sessionStorage.setItem('theme_v4',isDark?'dark':'light');}catch(e){}
+  applyTheme();
+}
+
+function goTo(tab){
+  current=tab;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+tab).classList.add('active');
+  document.getElementById('header-title').textContent=TITLES[tab];
+  render(tab);
+}
+
+function toggleBizFields(acc){
+  const t=document.getElementById(acc+'-type').value;
+  document.getElementById(acc+'-cat-wrap').style.display=t==='expense'?'block':'none';
+  document.getElementById(acc+'-client-wrap').style.display=t==='income'?'block':'none';
+  document.getElementById(acc+'-pending-wrap').style.display=t==='income'?'flex':'none';
+}
+
+function addEntry(acc){
+  const amt=parseFloat(document.getElementById(acc+'-amt').value);
+  if(!amt||isNaN(amt)||amt<=0){safeAlert('Please enter a valid amount');return;}
+  const date=document.getElementById(acc+'-date').value||today();
+  let entry={id:Date.now(),date,amount:amt};
+  if(acc==='firm'||acc==='company'){
+    const type=document.getElementById(acc+'-type').value;
+    const gstPct=parseFloat(document.getElementById(acc+'-gst').value)||0;
+    entry.type=type;
+    entry.category=type==='income'?'Income':document.getElementById(acc+'-cat').value;
+    entry.client=type==='income'?document.getElementById(acc+'-client').value:'';
+    entry.description=document.getElementById(acc+'-desc').value;
+    entry.gstPct=gstPct;
+    entry.gstAmt=gstPct>0?Math.round(amt*gstPct/100):0;
+    entry.recurring=document.getElementById(acc+'-recurring').checked;
+    entry.pending=type==='income'&&document.getElementById(acc+'-pending').checked;
+    ['amt','desc','client','gst'].forEach(f=>{document.getElementById(acc+'-'+f).value='';});
+    document.getElementById(acc+'-recurring').checked=false;
+    document.getElementById(acc+'-pending').checked=false;
+  } else {
+    const type=document.getElementById('personal-type').value;
+    entry.type=type;
+    entry.category=type==='expense'?'Cash Expense':type==='credit-card'?'Credit Card':type==='withdrawal-firm'?'Withdrawal \u2014 A & Y':'Withdrawal \u2014 Divilite';
+    entry.description=document.getElementById('personal-desc').value;
+    document.getElementById('personal-amt').value='';
+    document.getElementById('personal-desc').value='';
+  }
+  data[acc].unshift(entry);
+  save();render(acc);
+}
+
+async function deleteEntry(acc,id){
+  const ok=await customConfirm('Delete this entry?','Delete');
+  if(!ok)return;
+  data[acc]=data[acc].filter(e=>e.id!==id);
+  save();render(acc);
+}
+
+function togglePending(acc,id){
+  const e=data[acc].find(x=>x.id===id);
+  if(e){e.pending=!e.pending;save();render(acc);}
+}
+
+function setFilter(acc,val){filters[acc]=val;render(acc);}
+function setFYFilter(val){fyFilter=val;renderOverview();}
+
+function renderMonthPills(acc){
+  const months=allMonths(acc);
+  const el=document.getElementById(acc+'-months');
+  if(!months.length){el.innerHTML='';return;}
+  let h='<button class="month-pill '+(filters[acc]==='all'?'active':'')+'" onclick="setFilter(\''+acc+'\',\'all\')">All</button>';
+  months.forEach(m=>{h+='<button class="month-pill '+(filters[acc]===m?'active':'')+'" onclick="setFilter(\''+acc+'\',\''+m+'\')">'+mlabel(m)+'</button>';});
+  el.innerHTML=h;
+}
+
+function renderFYPills(){
+  const fys=getFYs();
+  const el=document.getElementById('ov-fy-pills');
+  if(!fys.length){el.innerHTML='';return;}
+  let h='<button class="fy-pill '+(fyFilter==='all'?'active':'')+'" onclick="setFYFilter(\'all\')">All Time</button>';
+  fys.forEach(y=>{h+='<button class="fy-pill '+(fyFilter==y?'active':'')+'" onclick="setFYFilter('+y+')">'+fyLabel(y)+'</button>';});
+  el.innerHTML=h;
+}
+
+function renderBreakdown(acc,entries,isPersonal){
+  const cats={};
+  entries.forEach(e=>{if(isPersonal||e.type==='expense')cats[e.category]=(cats[e.category]||0)+e.amount;});
+  const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){document.getElementById(acc+'-breakdown').innerHTML='<p style="font-size:12px;color:var(--text3)">No data yet</p>';return;}
+  const max=sorted[0][1];
+  const colors=['#a78bfa','#00e5a0','#ff5277','#4d9fff','#ffbe3d','#f472b6','#38bdf8','#fb923c'];
+  document.getElementById(acc+'-breakdown').innerHTML=sorted.map(([cat,amt],i)=>
+    '<div class="bar-item"><span class="bar-label" title="'+cat+'">'+cat+'</span><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(amt/max*100)+'%;background:'+colors[i%colors.length]+'"></div></div><span class="bar-val">'+fmt(amt)+'</span></div>'
+  ).join('');
+}
+
+function renderBizList(acc,entries){
+  const el=document.getElementById(acc+'-list');
+  if(!entries.length){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p>No entries yet</p></div>';return;}
+  el.innerHTML=entries.map(e=>{
+    const gstTag=e.gstAmt>0?'<span class="badge badge-gst">GST '+fmt(e.gstAmt)+'</span>':'';
+    const recTag=e.recurring?'<span class="badge badge-recurring">\uD83D\uDD01 Recurring</span>':'';
+    const pendTag=e.pending?'<span class="badge badge-pending">Pending</span>':'';
+    const checkSvg=e.pending
+      ?'<circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/>'
+      :'<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+    const checkBtn=e.type==='income'?'<button class="btn-check '+(e.pending?'':'checked')+'" onclick="togglePending(\''+acc+'\','+e.id+')" title="'+(e.pending?'Mark received':'Mark pending')+'"><svg viewBox="0 0 24 24">'+checkSvg+'</svg></button>':'';
+    return '<div class="entry-item '+(e.pending?'pending-item':'')+'"><div class="entry-left"><div class="entry-cat">'+(e.type==='income'?(e.client||'Client Income'):e.category)+'</div>'+(e.description?'<div class="entry-desc">'+e.description+'</div>':'')+'<div class="entry-date-row"><span class="entry-date">'+e.date+'</span><span class="badge '+(e.type==='income'?'badge-income':'badge-expense')+'">'+(e.type==='income'?'Income':'Expense')+'</span>'+gstTag+recTag+pendTag+'</div></div><div class="entry-right"><span class="entry-amt '+(e.type==='income'?'income':'expense')+'">'+(e.type==='income'?'+':'-')+fmt(e.amount)+'</span>'+checkBtn+'<button class="btn-del" onclick="deleteEntry(\''+acc+'\','+e.id+')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></div></div>';
+  }).join('');
+}
+
+function renderPersonalList(entries){
+  const el=document.getElementById('personal-list');
+  if(!entries.length){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>No entries yet</p></div>';return;}
+  el.innerHTML=entries.map(e=>'<div class="entry-item"><div class="entry-left"><div class="entry-cat">'+(e.description||e.category)+'</div><div class="entry-date-row"><span class="entry-date">'+e.date+'</span><span class="badge '+(e.type==='expense'?'badge-expense':e.type==='credit-card'?'badge-cc':'badge-withdrawal')+'">'+e.category+'</span></div></div><div class="entry-right"><span class="entry-amt expense">-'+fmt(e.amount)+'</span><button class="btn-del" onclick="deleteEntry(\'personal\','+e.id+')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></div></div>').join('');
+}
+
+function toggleClientReport(acc){
+  crOpen[acc]=!crOpen[acc];
+  const el=document.getElementById(acc+'-client-report');
+  const btn=document.getElementById(acc+'-cr-btn');
+  el.style.display=crOpen[acc]?'block':'none';
+  btn.textContent=crOpen[acc]?'Hide':'View';
+  if(crOpen[acc])renderClientReport(acc);
+}
+
+function renderClientReport(acc){
+  const inc=data[acc].filter(e=>e.type==='income');
+  const el=document.getElementById(acc+'-client-report');
+  if(!inc.length){el.innerHTML='<div class="empty-state" style="padding:16px"><p>No income entries yet</p></div>';return;}
+  const clients={};
+  inc.forEach(e=>{
+    const n=e.client||'Unknown Client';
+    if(!clients[n])clients[n]={received:0,pending:0,count:0};
+    e.pending?clients[n].pending+=e.amount:clients[n].received+=e.amount;
+    clients[n].count++;
+  });
+  const sorted=Object.entries(clients).sort((a,b)=>(b[1].received+b[1].pending)-(a[1].received+a[1].pending));
+  el.innerHTML=sorted.map(([name,d])=>'<div class="client-row"><div><div class="client-name">'+name+'</div><div class="client-meta">'+d.count+' invoice'+(d.count>1?'s':'')+' \u00B7 '+(d.pending>0?'<span style="color:var(--amber)">\u20B9'+Math.round(d.pending).toLocaleString('en-IN')+' pending</span>':'All received')+'</div></div><div class="client-amt '+(d.pending>0?'client-pending':'')+'">'+fmt(d.received+d.pending)+'</div></div>').join('');
+}
+
+function renderOverview(){
+  renderFYPills();
+  const fyE=acc=>fyFilter==='all'?data[acc]:data[acc].filter(e=>inFY(e.date,fyFilter));
+  const calcNet=acc=>{const e=fyE(acc);return e.filter(x=>x.type==='income'&&!x.pending).reduce((s,x)=>s+x.amount,0)-e.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0);};
+  const fNet=calcNet('firm');const cNet=calcNet('company');
+  const pOut=fyE('personal').reduce((s,e)=>s+e.amount,0);
+  const combined=fNet+cNet;
+  document.getElementById('ov-combined').textContent=fmt(combined);
+  document.getElementById('ov-combined').style.color=combined>=0?'var(--green)':'var(--red)';
+  document.getElementById('ov-fy-label').textContent=fyFilter==='all'?'All time':fyLabel(parseInt(fyFilter));
+  const sp=(id,val)=>{const el=document.getElementById(id);el.textContent=fmt(val);el.style.color=val>=0?'var(--green)':'var(--red)';};
+  sp('ov-firm-profit',fNet);sp('ov-company-profit',cNet);
+  document.getElementById('ov-personal-out').textContent=fmt(pOut);
+  const pf=data.firm.filter(e=>e.pending).reduce((s,e)=>s+e.amount,0);
+  const pc=data.company.filter(e=>e.pending).reduce((s,e)=>s+e.amount,0);
+  const tp=pf+pc;
+  document.getElementById('ov-pending-block').innerHTML=tp>0
+    ?'<div style="background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--radius);padding:12px 14px;margin-top:4px"><div style="font-size:11px;color:var(--amber);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">\u23F3 Pending Income</div><div style="font-size:18px;font-weight:700;font-family:DM Mono,monospace;color:var(--amber)">'+fmt(tp)+'</div><div style="font-size:11px;color:var(--text3);margin-top:2px">A&Y: '+fmt(pf)+' \u00B7 Divilite: '+fmt(pc)+'</div></div>'
+    :'';
+}
+
+function render(acc){
+  if(acc==='overview'){renderOverview();return;}
+  if(acc==='personal'){
+    renderMonthPills('personal');
+    const e=filtered('personal');
+    const exp=e.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0);
+    const cc=e.filter(x=>x.type==='credit-card').reduce((s,x)=>s+x.amount,0);
+    const wf=e.filter(x=>x.type==='withdrawal-firm').reduce((s,x)=>s+x.amount,0);
+    const wc=e.filter(x=>x.type==='withdrawal-company').reduce((s,x)=>s+x.amount,0);
+    document.getElementById('p-exp').textContent=fmt(exp);
+    document.getElementById('p-cc').textContent=fmt(cc);
+    document.getElementById('p-firm').textContent=fmt(wf);
+    document.getElementById('p-company').textContent=fmt(wc);
+    const LIMIT=10000;
+    const curM=mkey(today());
+    const lExp=filters.personal==='all'
+      ?data.personal.filter(x=>x.type==='expense'&&mkey(x.date)===curM).reduce((s,x)=>s+x.amount,0)
+      :exp;
+    const lPct=Math.min(Math.round(lExp/LIMIT*100),100);
+    const lOver=lExp>LIMIT;
+    const lC=lPct<60?'#00e5a0':lPct<85?'#ffbe3d':'#ff5277';
+    const rem=LIMIT-lExp;
+    const warn=lPct>=80&&!lOver?'<div style="font-size:11px;color:var(--amber);margin-top:5px">\u26A0\uFE0F Approaching \u20B910,000 limit!</div>':'';
+    document.getElementById('personal-budget-bar').innerHTML=
+      '<div style="background:var(--surface);border:1px solid '+(lOver?'var(--red)':'var(--border2)')+';border-radius:var(--radius);padding:13px 15px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">Monthly Cash Limit (excl. CC)</div><div style="font-size:13px;font-weight:600;color:'+(lOver?'var(--red)':'var(--text)')+'">'+
+      (lOver?'\u26A0\uFE0F Over by '+fmt(lExp-LIMIT):'\u20B9'+Math.round(rem).toLocaleString('en-IN')+' remaining')+
+      '</div></div><div style="text-align:right"><div style="font-size:17px;font-weight:700;font-family:DM Mono,monospace;color:'+lC+'">'+lPct+'%</div><div style="font-size:10px;color:var(--text3)">'+fmt(lExp)+' / \u20B910,000</div></div></div><div style="background:var(--surface2);border-radius:5px;height:9px;overflow:hidden"><div style="height:100%;border-radius:5px;background:'+lC+';width:'+lPct+'%;transition:width 0.5s ease"></div></div>'+warn+'</div>';
+    renderBreakdown('personal',e,true);
+    renderPersonalList(e);
+    return;
+  }
+  renderMonthPills(acc);
+  const entries=filtered(acc);
+  const inc=entries.filter(e=>e.type==='income'&&!e.pending).reduce((s,e)=>s+e.amount,0);
+  const pendInc=entries.filter(e=>e.type==='income'&&e.pending).reduce((s,e)=>s+e.amount,0);
+  const exp=entries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const gst=entries.filter(e=>e.gstAmt>0).reduce((s,e)=>s+e.gstAmt,0);
+  const net=inc-exp;
+  const netEl=document.getElementById(acc+'-net');
+  netEl.textContent=fmt(net);
+  netEl.className='profit-big '+(net>=0?'positive':'negative');
+  document.getElementById(acc+'-period').textContent=filters[acc]==='all'?'All time':mlabel(filters[acc]);
+  document.getElementById(acc+'-tot-inc').textContent=fmt(inc)+(pendInc>0?' (+'+fmt(pendInc)+' pending)':'');
+  document.getElementById(acc+'-tot-exp').textContent=fmt(exp);
+  document.getElementById(acc+'-tot-gst').textContent=fmt(gst);
+  if(crOpen[acc])renderClientReport(acc);
+  renderBreakdown(acc,entries,false);
+  renderBizList(acc,entries);
+}
+
+function openSettings(){
+  document.getElementById('settings-modal').classList.add('open');
+  renderRecurringModal();
+}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+document.getElementById('settings-modal').addEventListener('click',function(e){if(e.target===this)closeSettings();});
+
+function renderRecurringModal(){
+  const all=[];
+  ['firm','company'].forEach(acc=>{data[acc].filter(e=>e.recurring).forEach(e=>all.push({...e,acc}));});
+  const el=document.getElementById('recurring-list-modal');
+  if(!all.length){el.innerHTML='<p style="font-size:13px;color:var(--text3)">No recurring entries. Tick \u201CRecurring monthly\u201D when adding an expense.</p>';return;}
+  el.innerHTML=all.map(e=>'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:13px;font-weight:600">'+e.category+'</div><div style="font-size:11px;color:var(--text3)">'+(e.acc==='firm'?'A & Y':'Divilite')+' \u00B7 '+fmt(e.amount)+'/month</div></div><button class="action-btn" style="padding:7px 12px;flex:none;min-width:auto;font-size:12px" onclick="cloneRecurring(\''+e.acc+'\','+e.id+')">+ Add Now</button></div>').join('');
+}
+
+function cloneRecurring(acc,id){
+  const orig=data[acc].find(e=>e.id===id);
+  if(!orig)return;
+  data[acc].unshift({...orig,id:Date.now(),date:today(),recurring:false});
+  save();
+  safeAlert('Added: '+orig.category+' '+fmt(orig.amount)+' for today.');
+  renderRecurringModal();
+}
+
+function exportCSV(acc){
+  if(!data[acc].length){alert('No data to export');return;}
+  let csv='Date,Type,Category,Client,Description,Amount,GST%,GST Amount,Pending,Recurring\n';
+  data[acc].forEach(e=>{
+    const esc=s=>(s||'').toString().replace(/,/g,' ');
+    csv+=e.date+','+e.type+','+esc(e.category)+','+esc(e.client)+','+esc(e.description)+','+e.amount+','+(e.gstPct||0)+','+(e.gstAmt||0)+','+(e.pending?'Yes':'No')+','+(e.recurring?'Yes':'No')+'\n';
+  });
+  dl(acc+'_'+today()+'.csv',csv,'text/csv');
+}
+function exportAllCSV(){['firm','company','personal'].forEach(exportCSV);}
+function dl(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();}
+
+function backupData(){dl('my_accounts_backup_'+today()+'.json',JSON.stringify(data,null,2),'application/json');}
+function restoreData(event){
+  const file=event.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=function(e){
+    try{
+      const p=JSON.parse(e.target.result);
+      if(p.firm&&p.company&&p.personal){data=p;save();safeAlert('Data restored successfully!');closeSettings();render(current);}
+      else safeAlert('Invalid backup file.');
+    }catch(err){safeAlert('Error: '+err.message);}
+  };
+  r.readAsText(file);event.target.value='';
+}
+async function clearAll(){
+  const ok=await customConfirm('Clear ALL data? This cannot be undone.','Clear All');
+  if(ok){data={firm:[],company:[],personal:[]};save();closeSettings();render(current);}
+}
+
+function printSummary(){
+  const w=window.open('','_blank');
+  const n=acc=>{const e=data[acc];return{inc:e.filter(x=>x.type==='income'&&!x.pending).reduce((s,x)=>s+x.amount,0),exp:e.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0),pend:e.filter(x=>x.type==='income'&&x.pending).reduce((s,x)=>s+x.amount,0),gst:e.filter(x=>x.gstAmt>0).reduce((s,x)=>s+x.gstAmt,0)};};
+  const f=n('firm');const c=n('company');
+  const pExp=data.personal.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const pCC=data.personal.filter(e=>e.type==='credit-card').reduce((s,e)=>s+e.amount,0);
+  const pW=data.personal.filter(e=>e.type==='withdrawal-firm'||e.type==='withdrawal-company').reduce((s,e)=>s+e.amount,0);
+  const R=v=>'&#8377;'+Math.round(v).toLocaleString('en-IN');
+  w.document.write('<!DOCTYPE html><html><head><title>Accounts Summary</title><style>body{font-family:sans-serif;padding:24px;color:#0f172a;max-width:700px}h1{font-size:20px;margin-bottom:2px}h2{font-size:14px;color:#334155;margin:18px 0 8px;padding-bottom:4px;border-bottom:2px solid #e2e8f0}table{width:100%;border-collapse:collapse;margin-bottom:8px}th,td{text-align:left;padding:7px 10px;border-bottom:1px solid #e2e8f0;font-size:13px}th{background:#f8fafc;font-weight:600}.g{color:#059669}.r{color:#e11d48}.tot{font-weight:700;font-size:14px}@media print{button{display:none}}</style></head><body>');
+  w.document.write('<h1>Accounts Summary</h1><p style="color:#64748b;font-size:12px">'+new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})+'</p>');
+  w.document.write('<h2>A &amp; Y Associates</h2><table><tr><th>Metric</th><th>Amount</th></tr><tr><td>Income Received</td><td class="g">'+R(f.inc)+'</td></tr>'+(f.pend>0?'<tr><td>Income Pending</td><td style="color:#d97706">'+R(f.pend)+'</td></tr>':'')+'<tr><td>Total Expenses</td><td class="r">'+R(f.exp)+'</td></tr><tr><td>GST Collected</td><td>'+R(f.gst)+'</td></tr><tr><td class="tot">Net Profit</td><td class="tot '+(f.inc-f.exp>=0?'g':'r')+'">'+R(f.inc-f.exp)+'</td></tr></table>');
+  w.document.write('<h2>Divilite Corporate Solutions OPC</h2><table><tr><th>Metric</th><th>Amount</th></tr><tr><td>Income Received</td><td class="g">'+R(c.inc)+'</td></tr>'+(c.pend>0?'<tr><td>Income Pending</td><td style="color:#d97706">'+R(c.pend)+'</td></tr>':'')+'<tr><td>Total Expenses</td><td class="r">'+R(c.exp)+'</td></tr><tr><td>GST Collected</td><td>'+R(c.gst)+'</td></tr><tr><td class="tot">Net Profit</td><td class="tot '+(c.inc-c.exp>=0?'g':'r')+'">'+R(c.inc-c.exp)+'</td></tr></table>');
+  w.document.write('<h2>Personal</h2><table><tr><th>Category</th><th>Amount</th></tr><tr><td>Cash Expenses</td><td class="r">'+R(pExp)+'</td></tr><tr><td>Credit Card</td><td class="r">'+R(pCC)+'</td></tr><tr><td>Withdrawals</td><td class="r">'+R(pW)+'</td></tr></table>');
+  w.document.write('<button onclick="window.print()" style="margin-top:16px;padding:10px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer">Print / Save as PDF</button></body></html>');
+  w.document.close();
+}
+
+// ======== INVOICE MODULE ========
+let invoices = [];
+let invFilter = 'all';
+try { const s = localStorage.getItem('my_invoices_v1'); if(s) invoices = JSON.parse(s); } catch(e){}
+function saveInv(){ try{ localStorage.setItem('my_invoices_v1', JSON.stringify(invoices)); }catch(e){} }
+
+const _origGoTo = goTo;
+goTo = function(tab){
+  if(tab==='invoices'){
+    current=tab;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-invoices').classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('nav-invoices').classList.add('active');
+    document.getElementById('header-title').textContent='Invoices';
+    renderInvoices();
+    return;
+  }
+  _origGoTo(tab);
+};
+
+function setInvFilter(f){
+  invFilter=f;
+  ['all','firm','company','pending'].forEach(x=>{
+    const el=document.getElementById('inv-filter-'+x);
+    if(el) el.classList.toggle('active',x===f);
+  });
+  renderInvList();
+}
+
+function calcInvTotal(){
+  const base=parseFloat(document.getElementById('inv-base').value)||0;
+  const pct=parseFloat(document.getElementById('inv-gst-pct').value)||0;
+  const gst=Math.round(base*pct/100);
+  const prev=document.getElementById('inv-total-preview');
+  prev.style.display=base>0?'block':'none';
+  document.getElementById('prev-base').textContent=fmt(base);
+  document.getElementById('prev-gst-label').textContent='GST ('+pct+'%)';
+  document.getElementById('prev-gst').textContent=fmt(gst);
+  document.getElementById('prev-total').textContent=fmt(base+gst);
+}
+
+function raiseInvoice(){
+  const base=parseFloat(document.getElementById('inv-base').value);
+  if(!base||isNaN(base)||base<=0){safeAlert('Enter a valid base amount');return;}
+  const pct=parseFloat(document.getElementById('inv-gst-pct').value)||0;
+  const gstAmt=Math.round(base*pct/100);
+  const acc=document.getElementById('inv-account').value;
+  const rawNo=document.getElementById('inv-no').value.trim();
+  const invNo=rawNo||('INV-'+String(invoices.length+1).padStart(3,'0'));
+  const client=document.getElementById('inv-client').value.trim();
+  const desc=document.getElementById('inv-desc').value.trim();
+  const date=document.getElementById('inv-date').value||today();
+  const due=document.getElementById('inv-due').value||'';
+  if(!client){safeAlert('Please enter client name');return;}
+  invoices.unshift({id:Date.now(),acc,invNo,client,desc,base,gstPct:pct,gstAmt,total:base+gstAmt,date,due,status:'pending'});
+  saveInv();
+  ['inv-no','inv-client','inv-desc','inv-base','inv-due'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('inv-gst-pct').value='18';
+  document.getElementById('inv-date').value=today();
+  document.getElementById('inv-total-preview').style.display='none';
+  renderInvoices();
+  safeAlert('Invoice '+invNo+' raised for '+client+' — Total: '+fmt(base+gstAmt)+(pct>0?' (incl. GST '+fmt(gstAmt)+')':''));
+}
+
+async function markInvoiceReceived(id){
+  const inv=invoices.find(x=>x.id===id);
+  if(!inv)return;
+  if(inv.status==='received'){
+    const ok1=await customConfirm('Mark this invoice as PENDING again?','Yes, Mark Pending','green');
+    if(!ok1)return;
+    inv.status='pending';
+    delete inv.receivedDate;
+  } else {
+    const accName=inv.acc==='firm'?'A & Y Associates':'Divilite OPC';
+    const ok2=await customConfirm('Mark '+inv.invNo+' received? This will add '+fmt(inv.base)+' as income in '+accName+'.','Mark Received','green');
+    if(!ok2)return;
+    inv.status='received';
+    inv.receivedDate=today();
+    data[inv.acc].unshift({
+      id:Date.now(),date:today(),amount:inv.base,type:'income',category:'Income',
+      client:inv.client,description:inv.invNo+(inv.desc?' \u2014 '+inv.desc:''),
+      gstPct:inv.gstPct,gstAmt:inv.gstAmt,recurring:false,pending:false
+    });
+    save();
+  }
+  saveInv();
+  renderInvoices();
+}
+
+async function deleteInvoice(id){
+  const ok=await customConfirm('Delete this invoice?','Delete');
+  if(!ok)return;
+  invoices=invoices.filter(x=>x.id!==id);
+  saveInv();renderInvoices();
+}
+
+function renderInvoices(){renderInvSummary();renderInvList();}
+
+function renderInvSummary(){
+  const gstTotal=invoices.reduce((s,x)=>s+x.gstAmt,0);
+  const outstanding=invoices.filter(x=>x.status==='pending').reduce((s,x)=>s+x.total,0);
+  const collected=invoices.filter(x=>x.status==='received').reduce((s,x)=>s+x.total,0);
+  document.getElementById('inv-gst-pay').textContent=fmt(gstTotal);
+  document.getElementById('inv-outstanding').textContent=fmt(outstanding);
+  document.getElementById('inv-collected').textContent=fmt(collected);
+  const byRate={};
+  invoices.forEach(x=>{if(x.gstPct>0){if(!byRate[x.gstPct])byRate[x.gstPct]={count:0,gst:0,base:0};byRate[x.gstPct].count++;byRate[x.gstPct].gst+=x.gstAmt;byRate[x.gstPct].base+=x.base;}});
+  const el=document.getElementById('inv-gst-summary');
+  if(!Object.keys(byRate).length){el.innerHTML='<p style="font-size:12px;color:var(--text3)">No GST invoices yet.</p>';return;}
+  el.innerHTML=Object.entries(byRate).sort((a,b)=>b[0]-a[0]).map(([pct,d])=>
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:13px;font-weight:600;color:var(--blue)">GST @ '+pct+'%</div><div style="font-size:11px;color:var(--text3)">'+d.count+' invoice'+(d.count>1?'s':'')+' \u00B7 Base '+fmt(d.base)+'</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:700;font-family:DM Mono,monospace;color:var(--red)">'+fmt(d.gst)+'</div><div style="font-size:10px;color:var(--text3)">GST payable</div></div></div>'
+  ).join('');
+}
+
+function renderInvList(){
+  let list=[...invoices];
+  if(invFilter==='firm') list=list.filter(x=>x.acc==='firm');
+  if(invFilter==='company') list=list.filter(x=>x.acc==='company');
+  if(invFilter==='pending') list=list.filter(x=>x.status==='pending');
+  document.getElementById('inv-count-label').textContent=list.length+' invoice'+(list.length!==1?'s':'');
+  const el=document.getElementById('inv-list');
+  if(!list.length){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>No invoices yet</p></div>';return;}
+  const td=today();
+  el.innerHTML=list.map(inv=>{
+    const overdue=inv.status==='pending'&&inv.due&&inv.due<td;
+    const accTag=inv.acc==='firm'
+      ?'<span class="badge" style="background:var(--firm-bg);color:var(--firm)">A&amp;Y</span>'
+      :'<span class="badge" style="background:var(--company-bg);color:var(--company)">Divilite</span>';
+    const stTag=inv.status==='received'
+      ?'<span class="badge badge-income">\u2713 Received</span>'
+      :overdue?'<span class="badge" style="background:var(--red-bg);color:var(--red)">Overdue</span>'
+      :'<span class="badge badge-pending">Pending</span>';
+    const dueLine=inv.due?'<span class="entry-date" style="color:'+(overdue?'var(--red)':'var(--text3)')+'">Due: '+inv.due+(overdue?' \u26A0':'')+'</span>':'';
+    const rcvLine=inv.status==='received'&&inv.receivedDate?'<span class="entry-date" style="color:var(--green)">Rcvd: '+inv.receivedDate+'</span>':'';
+    const checkPath=inv.status==='received'
+      ?'<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
+      :'<circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/>';
+    return '<div class="entry-item" style="'+(inv.status==='received'?'opacity:0.72':'')+(overdue?';border-left:3px solid var(--red)':'')+'"><div class="entry-left"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><span style="font-size:13px;font-weight:700">'+inv.invNo+'</span>'+accTag+stTag+'</div><div style="font-size:13px;font-weight:500;color:var(--text2)">'+inv.client+'</div>'+(inv.desc?'<div class="entry-desc">'+inv.desc+'</div>':'')+'<div class="entry-date-row"><span class="entry-date">'+inv.date+'</span>'+dueLine+rcvLine+'</div><div style="margin-top:5px;display:flex;gap:10px"><span style="font-size:11px;color:var(--text3)">Base <b style="color:var(--text)">'+fmt(inv.base)+'</b></span>'+(inv.gstPct>0?'<span style="font-size:11px;color:var(--text3)">GST '+inv.gstPct+'% <b style="color:var(--blue)">'+fmt(inv.gstAmt)+'</b></span>':'')+'<span style="font-size:11px;color:var(--text3)">Total <b style="color:var(--green)">'+fmt(inv.total)+'</b></span></div></div><div class="entry-right" style="flex-direction:column;align-items:flex-end;gap:6px"><button class="btn-check '+(inv.status==='received'?'checked':'')+'" onclick="markInvoiceReceived('+inv.id+')" title="'+(inv.status==='received'?'Mark pending':'Mark received')+'"><svg viewBox="0 0 24 24">'+checkPath+'</svg></button><button class="btn-del" onclick="deleteInvoice('+inv.id+')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></div></div>';
+  }).join('');
+}
+Object.assign(TITLES,{invoices:'Invoices'});
+
+// Init
+const initD=today();
+['firm','company','personal'].forEach(a=>{document.getElementById(a+'-date').value=initD;});
+document.getElementById('inv-date').value=initD;
+applyTheme();
+renderOverview();
+</script>
+</body>
+</html>
